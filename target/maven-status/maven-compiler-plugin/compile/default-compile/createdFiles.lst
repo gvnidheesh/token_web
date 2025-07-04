@@ -1,0 +1,6 @@
+in\gov\kerala\ehealth\token\service\PersonService.class
+in\gov\kerala\ehealth\token\TokenApplication.class
+in\gov\kerala\ehealth\token\HelloController.class
+in\gov\kerala\ehealth\token\controller\PersonController.class
+in\gov\kerala\ehealth\token\repository\PersonRepository.class
+in\gov\kerala\ehealth\token\model\Person.class
