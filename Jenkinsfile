@@ -22,4 +22,13 @@ node {
         junit '**/target/surefire-reports/TEST-*.xml'
         archiveArtifacts 'target/*.jar'
     }
+    
+     stage('Build Docker Image') {
+                steps {
+                    script {
+                        sh 'docker build -t $IMAGE_NAME:${BUILD_NUMBER} .'
+                    }
+                }
+            }
+            
 }
