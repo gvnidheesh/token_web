@@ -8,6 +8,10 @@ node {
         // **       in the global configuration.
         mvnHome = tool 'M3'
     }
+    environment {
+        IMAGE_NAME = 'nidheeshg/token_web'
+        DOCKER_CREDS = credentials('docker-hub-creds')
+    }
     stage('Build') {
         // Run the maven build
         withEnv(["MVN_HOME=$mvnHome"]) {
@@ -23,12 +27,7 @@ node {
         archiveArtifacts 'target/*.jar'
     }
     
-     stage('Build Docker Image') {
-                steps {
-                    script {
-                        sh 'docker build -t $IMAGE_NAME:${BUILD_NUMBER} .'
-                    }
-                }
-            }
+     
+    }
             
 }
