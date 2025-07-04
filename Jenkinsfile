@@ -1,49 +1,25 @@
-pipeline {
-    agent any
-
-    environment {
-        IMAGE_NAME = 'nidheeshg/springboot-app'
-        DOCKER_CREDS = credentials('docker-hub-creds')
+node {
+    def mvnHome
+    stage('Preparation') { // for display purposes
+        // Get some code from a GitHub repository
+        git 'https://github.com/gvnidheesh/token_web.git'
+        // Get the Maven tool.
+        // ** NOTE: This 'M3' Maven tool must be configured
+        // **       in the global configuration.
+        mvnHome = tool 'M3'
     }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/gvnidheesh/token_web.git'
-            }
-        }
-
-        stage('Build App') {
-            steps {
-                sh './mvnw clean package -DskipTests'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh 'docker build -t $IMAGE_NAME:${BUILD_NUMBER} .'
-                }
-            }
-        }
-
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    sh '''
-                    echo "$DOCKER_CREDS_PSW" | docker login -u "$DOCKER_CREDS_USR" --password-stdin
-                    docker tag $IMAGE_NAME:${BUILD_NUMBER} $IMAGE_NAME:latest
-                    docker push $IMAGE_NAME:${BUILD_NUMBER}
-                    docker push $IMAGE_NAME:latest
-                    '''
-                }
+    stage('Build') {
+        // Run the maven build
+        withEnv(["MVN_HOME=$mvnHome"]) {
+            if (isUnix()) {
+                sh '"$MVN_HOME/bin/mvn" -Dmaven.test.failure.ignore clean package'
+            } else {
+                bat(/"%MVN_HOME%\bin\mvn" -Dmaven.test.failure.ignore clean package/)
             }
         }
     }
-
-    post {
-        always {
-            sh 'docker logout'
-        }
+    stage('Results') {
+        junit '**/target/surefire-reports/TEST-*.xml'
+        archiveArtifacts 'target/*.jar'
     }
 }
