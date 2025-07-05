@@ -29,7 +29,9 @@ node {
         }
     }
     stage('Build Docker Image') {
-            sh "docker build -t ${imageName}:latest ."
+             retry(2) {
+             	sh "docker build -t ${imageName}:latest ."
+             }
         }
         
    stage('Docker Push') {
@@ -39,9 +41,11 @@ node {
 		    passwordVariable: 'DOCKER_PASSWORD'
 		  )]) {
 		    // use a single‑quoted shell string so Groovy doesn't interpolate the secret
-		    sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
-		    // imageName is safe to interpolate here
-		    sh "docker push ${imageName}:latest"
+		    retry(3) { 
+			    sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
+			    // imageName is safe to interpolate here
+			    sh "docker push ${imageName}:latest"
+		    }
 		  }
 }
 
