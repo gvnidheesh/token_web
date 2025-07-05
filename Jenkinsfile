@@ -5,7 +5,7 @@ node {
     }
   def mvnHome
   def imageName        = 'nidheeshg/spring-boot'
-  def versionName    = $Version ?: "1.0.1" 
+  def versionName    = env.Version ?: "1.0.1" 
   def dockerCredsId    = 'docker-hub-creds'
   currentBuild.result  = 'SUCCESS'
   //def tag = env.BUILD_NUMBER
