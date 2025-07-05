@@ -14,6 +14,9 @@ public class HelloController {
 
 	    public HelloController(AppProperties appProperties) {
 	        this.appProperties = appProperties;
+	        // Print to console
+	        System.out.println("App Name: " + appProperties.getName());
+	        System.out.println("App Version: " + appProperties.getVersion());
 	    } 
 	
 	 
@@ -21,6 +24,9 @@ public class HelloController {
 		 public String hello(Model model) {
 		  model.addAttribute("appName", appProperties.getName());
 	        model.addAttribute("appVersion", appProperties.getVersion());
+	        
+	       
+	        
         return "hello"; // maps to hello.html in templates folder
     }
     

@@ -8,6 +8,15 @@ node {
         // **       in the global configuration.
         mvnHome = tool 'M3'
     }
+	//environment {
+    //    REGISTRY_URL = 'hub.ehealth.kerala.gov.in'
+   //     IMAGE_NAME = "${REGISTRY_URL}/ehealth/token"
+   //     DOCKER_CREDENTIALS_ID = 'ehealth-docker-creds'
+   // }
+    environment {
+        IMAGE_NAME = 'nidheeshg/spring-boot'
+        DOCKER_CREDENTIALS_ID = 'docker-hub-creds'
+    }
     stage('Build') {
         // Run the maven build
         withEnv(["MVN_HOME=$mvnHome"]) {
@@ -18,7 +27,11 @@ node {
             }
         }
     }
-    
+    stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME}:latest ."
+            }
+        }
     stage('Results') {
     
         junit '**/target/surefire-reports/TEST-*.xml'
