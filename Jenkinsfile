@@ -1,5 +1,7 @@
 node {
     def mvnHome
+    stages {
+    
     stage('Preparation') { // for display purposes
         // Get some code from a GitHub repository
         git 'https://github.com/gvnidheesh/token_web.git'
@@ -62,5 +64,7 @@ node {
 			  failure {
 			    echo '❌ Still failing after retries.'
 			  }
-		}     
+		}   
+		
+		}  
 }
