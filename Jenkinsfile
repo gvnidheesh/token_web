@@ -52,11 +52,10 @@ node {
     throw err
 
   } finally {
-    // Post‑build notification
     if (currentBuild.result == 'SUCCESS') {
-      echo '✅ All done!'
+      echo "✅ Build #${env.BUILD_NUMBER} succeeded and image tagged ${baseImage}:${env.BUILD_NUMBER}"
     } else {
-      echo '❌ Still failing after retries.'
+      echo "❌ Build #${env.BUILD_NUMBER} failed."
     }
   }
 }
