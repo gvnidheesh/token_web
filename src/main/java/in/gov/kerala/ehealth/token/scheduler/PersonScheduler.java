@@ -22,7 +22,7 @@ public class PersonScheduler {
     /**
      * This method is triggered every 10 seconds and broadcasts person list via WebSocket.
      */
-    @Scheduled(fixedRate = 10000) // 10 seconds
+    @Scheduled(fixedRate = 20000) // 20 seconds
     public void broadcastPersons() {
         List<PersonDTO> persons = personRepository.findAll()
             .stream()
