@@ -32,18 +32,19 @@ node {
             sh "docker build -t ${imageName}:latest ."
         }
         
-    stage('Docker Push') {
-        withCredentials([usernamePassword(
-            credentialsId: 'docker-hub-creds',
-            usernameVariable: 'DOCKER_USERNAME',
-            passwordVariable: 'DOCKER_PASSWORD'
-        )]) {
-            sh """
-                echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                docker push ${imageName}:latest
-            """
-        }
-    }
+   stage('Docker Push') {
+		  withCredentials([usernamePassword(
+		    credentialsId: 'docker-hub-creds',
+		    usernameVariable: 'DOCKER_USERNAME',
+		    passwordVariable: 'DOCKER_PASSWORD'
+		  )]) {
+		    // use a single‑quoted shell string so Groovy doesn't interpolate the secret
+		    sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
+		    // imageName is safe to interpolate here
+		    sh "docker push ${imageName}:latest"
+		  }
+}
+
     stage('Results') {
     
         junit '**/target/surefire-reports/TEST-*.xml'
