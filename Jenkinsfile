@@ -4,6 +4,7 @@ node {
   def imageName        = 'nidheeshg/spring-boot'
   def dockerCredsId    = 'docker-hub-creds'
   currentBuild.result  = 'SUCCESS'
+  def tag = env.BUILD_NUMBER
 
   try {
     stage('Preparation') {
@@ -23,7 +24,7 @@ node {
 
     stage('Build Docker Image') {
       retry(2) {
-        sh "docker build -t ${imageName}:latest ."
+       sh "docker build -t ${imageName}:${tag} -t ${imageName}:latest ."
       }
     }
 
@@ -37,6 +38,7 @@ node {
           // safe secret handling: single‑quoted Groovy → shell expands
           sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
           sh "docker push ${imageName}:latest"
+          sh "docker push ${imageName}:${tag}"
         }
       }
     }
