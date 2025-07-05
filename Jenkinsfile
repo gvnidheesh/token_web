@@ -1,5 +1,8 @@
 node {
   // Tools & vars
+  parameters {
+        string(name: 'Version', defaultValue: '1.0.1', description: 'Version to use for build tag')
+    }
   def mvnHome
   def imageName        = 'nidheeshg/spring-boot'
   def versionName    = $Version ?: "1.0.1" 
@@ -8,7 +11,7 @@ node {
   //def tag = env.BUILD_NUMBER
  // def tag = "${versionName}-${env.BUILD_NUMBER}"
   def tag = "${versionName}"
-
+  
   try {
     stage('Preparation') {
       git 'https://github.com/gvnidheesh/token_web.git'
