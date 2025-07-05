@@ -31,6 +31,19 @@ node {
     stage('Build Docker Image') {
             sh "docker build -t ${imageName}:latest ."
         }
+        
+    stage('Docker Push') {
+        withCredentials([usernamePassword(
+            credentialsId: 'ehealth-docker-creds',
+            usernameVariable: 'DOCKER_USERNAME',
+            passwordVariable: 'DOCKER_PASSWORD'
+        )]) {
+            sh """
+                echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                docker push ${imageName}:latest
+            """
+        }
+    }
     stage('Results') {
     
         junit '**/target/surefire-reports/TEST-*.xml'
