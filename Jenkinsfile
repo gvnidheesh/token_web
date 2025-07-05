@@ -53,5 +53,14 @@ node {
     
         junit '**/target/surefire-reports/TEST-*.xml'
         archiveArtifacts 'target/*.jar'
-    }        
+    }   
+    
+    post {
+			  success {
+			    echo '✅ All done!'
+			  }
+			  failure {
+			    echo '❌ Still failing after retries.'
+			  }
+		}     
 }
