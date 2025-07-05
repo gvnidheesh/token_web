@@ -17,6 +17,7 @@ node {
         IMAGE_NAME = 'nidheeshg/spring-boot'
         DOCKER_CREDENTIALS_ID = 'docker-hub-creds'
     }
+      def imageName = 'nidheeshg/spring-boot'
     stage('Build') {
         // Run the maven build
         withEnv(["MVN_HOME=$mvnHome"]) {
@@ -28,7 +29,7 @@ node {
         }
     }
     stage('Build Docker Image') {
-            sh "docker build -t ${IMAGE_NAME}:latest ."
+            sh "docker build -t ${imageName}:latest ."
         }
     stage('Results') {
     
