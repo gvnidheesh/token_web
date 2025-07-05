@@ -34,7 +34,7 @@ node {
         
     stage('Docker Push') {
         withCredentials([usernamePassword(
-            credentialsId: 'ehealth-docker-creds',
+            credentialsId: 'docker-hub-creds',
             usernameVariable: 'DOCKER_USERNAME',
             passwordVariable: 'DOCKER_PASSWORD'
         )]) {
